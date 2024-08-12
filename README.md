@@ -56,7 +56,7 @@ To do it, go to:
 and click on Fork button and then (+) Create new fork.
 
 After forking repository to your account, please clone it to your local machine and search for all occurrences of:
-* <<ACCOUNT_ID>>
+* 024848486118
 
 This is base AWS account id that we use for the base repository.
 You must replace this with your own account id in all files.
@@ -192,7 +192,7 @@ var.common_tags             -> {"app:hub"="emea", "app:env"="test", "app:name"="
 var.environment             -> emea
 var.profile                 -> backend-test
 var.region                  -> eu-central-1
-var.remote_state_bucket     -> tf-state-backend-test-eu-central-1-<<UNIQUE_BUCKET_STRING>>
+var.remote_state_bucket     -> tf-state-backend-test-eu-central-1-kz-eszkere8584
 var.shared_credentials_file -> C:\\Users\\<<USERNAME>>\\.aws\\credentials
 ```
 Or use one-liner:
@@ -202,7 +202,7 @@ terraform apply \
   -var='environment=emea' \
   -var='profile=backend-test' \
   -var='region=eu-central-1' \
-  -var='remote_state_bucket=tf-state-backend-test-eu-central-1-<<UNIQUE_BUCKET_STRING>>' \
+  -var='remote_state_bucket=tf-state-backend-test-eu-central-1-kz-eszkere8584' \
   -var='shared_credentials_file=C:\\Users\\<<USERNAME>>\\.aws\\credentials'
 ```
 Set ```<<USERNAME>>``` to your CORP ID.
