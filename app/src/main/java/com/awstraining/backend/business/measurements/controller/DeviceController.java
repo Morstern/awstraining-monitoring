@@ -33,11 +33,11 @@ class DeviceController implements DeviceIdApi {
     public DeviceController(final MeasurementService service, final MeterRegistry meterRegistry) {
         this.service = service;
         this.meterRegistry = meterRegistry;
-        this.publishMeasurementsCounter = Counter.builder("demo.counter")
+        this.publishMeasurementsCounter = Counter.builder("publishMeasurements.counter")
                 .tag("method", "publishMeasurements")
                 .register(meterRegistry);
 
-        this.retrieveMeasurementsCounter = Counter.builder("demo.counter")
+        this.retrieveMeasurementsCounter = Counter.builder("retrieveMeasurements.counter")
                 .tag("method", "retrieveMeasurements")
                 .register(meterRegistry);
     }
