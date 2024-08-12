@@ -9,6 +9,8 @@ import com.awstraining.backend.api.rest.v1.model.Measurement;
 import com.awstraining.backend.api.rest.v1.model.Measurements;
 import com.awstraining.backend.business.measurements.MeasurementDO;
 import com.awstraining.backend.business.measurements.MeasurementService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,22 @@ class DeviceController implements DeviceIdApi {
     private static final Logger LOGGER = LogManager.getLogger(DeviceController.class);
 
     private final MeasurementService service;
+    private final MeterRegistry meterRegistry;
+
+    private final Counter publishMeasurementsCounter;
+    private final Counter retrieveMeasurementsCounter;
 
     @Autowired
-    public DeviceController(final MeasurementService service) {
+    public DeviceController(final MeasurementService service, final MeterRegistry meterRegistry) {
         this.service = service;
+        this.meterRegistry = meterRegistry;
+        this.publishMeasurementsCounter = Counter.builder("demo.counter")
+                .tag("method", "publishMeasurements")
+                .register(meterRegistry);
+
+        this.retrieveMeasurementsCounter = Counter.builder("demo.counter")
+                .tag("method", "retrieveMeasurements")
+                .register(meterRegistry);
     }
 
     @Override
@@ -33,6 +47,7 @@ class DeviceController implements DeviceIdApi {
         LOGGER.info("Publishing measurement for device '{}'", deviceId);
         final MeasurementDO measurementDO = fromMeasurement(deviceId, measurement);
         service.saveMeasurement(measurementDO);
+        publishMeasurementsCounter.increment();
         return ResponseEntity.ok(measurement);
     }
     @Override
@@ -45,6 +60,7 @@ class DeviceController implements DeviceIdApi {
         final Measurements measurementsResult = new Measurements();
         measurementsResult.measurements(measurements);
         LOGGER.info("Retrieved amount of measurements for device '{}', {}", deviceId, measurements.size());
+        retrieveMeasurementsCounter.increment();
         return ResponseEntity.ok(measurementsResult);
     }
 
